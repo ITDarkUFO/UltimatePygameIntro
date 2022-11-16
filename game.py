@@ -1,4 +1,3 @@
-import math
 from sys import exit
 import pygame
 
@@ -17,8 +16,9 @@ def display_lives():
 
 def display_score():
     current_time = pygame.time.get_ticks() - start_time
+    score = int(current_time / 1000)
     score_surf = font.render(
-        f'Score: {math.floor(current_time / 1000)}', False, 'Black')
+        f'Score: {score}', False, 'Black')
     score_rect = score_surf.get_rect(topleft=(300, 20))
 
     score_background = pygame.Rect(
@@ -27,6 +27,8 @@ def display_score():
     pygame.draw.rect(screen, '#C0E8EC', score_background, 6, 10)
 
     screen.blit(score_surf, score_rect)
+
+    return score
 
 
 pygame.init()
@@ -83,7 +85,7 @@ while True:
         screen.blit(ground_surf, (0, 432))
 
         # Score
-        display_score()
+        score = display_score()
         display_lives()
 
         # Player
@@ -116,18 +118,21 @@ while True:
         name_rect = name_surf.get_rect(center=(400, 100))
         screen.blit(name_surf, name_rect)
 
-        player_endgame_surf = pygame.image.load('./graphics/Player/player_stand.png').convert_alpha()
-        player_endgame_surf = pygame.transform.rotozoom(player_endgame_surf, 0, 2)
+        player_endgame_surf = pygame.image.load(
+            './graphics/Player/player_stand.png').convert_alpha()
+        player_endgame_surf = pygame.transform.rotozoom(
+            player_endgame_surf, 0, 2)
         player_endgame_rect = player_endgame_surf.get_rect(center=(400, 300))
         screen.blit(player_endgame_surf, player_endgame_rect)
+
+        final_score_surf = font.render(
+            f"You're score: {score}", False, '#C0E8EC')
+        final_score_rect = final_score_surf.get_rect(center=(400, 450))
+        screen.blit(final_score_surf, final_score_rect)
 
         continue_surf = font.render('Press Space to run', False, '#C0E8EC')
         continue_rect = continue_surf.get_rect(center=(400, 500))
         screen.blit(continue_surf, continue_rect)
-
-        # gameover_surf = font.render('Game Over', False, 'Black')
-        # gameover_rect = gameover_surf.get_rect(center=(400, 300))
-        # screen.blit(gameover_surf, gameover_rect)
 
     pygame.display.update()
     clock.tick(60)
